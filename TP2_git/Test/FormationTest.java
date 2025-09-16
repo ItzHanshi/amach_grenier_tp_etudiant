@@ -19,6 +19,8 @@ public class FormationTest {
         info = new Matiere("Informatique");
     }
 
+
+
     @Test
     void testAjoutMatiere() {
         formation.ajout_matiere(math, 2.0);
@@ -40,6 +42,7 @@ public class FormationTest {
 
         assertTrue(outContent.toString().contains("La matiere existe deja"));
     }
+
 
     @Test
     void testSupprimerMatiere() {
