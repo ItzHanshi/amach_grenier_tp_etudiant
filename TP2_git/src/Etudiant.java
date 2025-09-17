@@ -3,7 +3,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 
-
 public class Etudiant {
     private Identite identite;
     private Formation formation;
@@ -22,44 +21,40 @@ public class Etudiant {
     public Formation getFormation() {
         return formation;
     }
+
     public Map<Matiere, List<Double>> getRésultats() {
         return resultats;
     }
 
-    public void ajouterNote(Matiere matiere, Double note) {
+    public void ajouterNote(Matiere matiere, Double note) throws IllegalArgumentException {
         if (!formation.matiereMap.containsKey(matiere)) {
-            System.out.println("la matière n'est pas dans la formation de l'étudiant.");
-            return;
+            throw new IllegalArgumentException("La matière n'est pas dans la formation de l'étudiant");
         }
         if (note < 0 || note > 20) {
-            System.out.println("la note doit être entre 0 et 20.");
-            return;
+            throw new IllegalArgumentException("La note doit être entre 0 et 20");
         }
         resultats.computeIfAbsent(matiere, k -> new ArrayList<>()).add(note);
     }
 
-
-    public void calculerMoyenneMatiere(Matiere matiere) {
+    public double calculerMoyenneMatiere(Matiere matiere) throws IllegalArgumentException {
         if (!formation.matiereMap.containsKey(matiere)) {
-            System.out.println("la matière n'est pas dans la formation de l'étudiant");
-            return;
+            throw new IllegalArgumentException("La matière n'est pas dans la formation de l'étudiant");
         }
         List<Double> notes = resultats.get(matiere);
         if (notes == null || notes.isEmpty()) {
-            System.out.println("pas de note pour cette matière");
-            return;
+            throw new IllegalArgumentException("Pas de note pour cette matière");
         }
         double somme = 0;
         for (double n : notes) {
             somme += n;
         }
-        double moyenne = somme / notes.size();
-        System.out.println("moyenne de : " + matiere.getNom() + " est : " + moyenne);
+        return somme / notes.size();
     }
 
-    public void calculerMoyenneGenerale() {
+    public double calculerMoyenneGenerale() throws IllegalArgumentException {
         double total = 0;
         double totalCoeff = 0;
+
         for (Matiere matiere : formation.matiereMap.keySet()) {
             List<Double> notes = resultats.get(matiere);
             if (notes != null && !notes.isEmpty()) {
@@ -73,13 +68,11 @@ public class Etudiant {
                 totalCoeff += coeff;
             }
         }
+
         if (totalCoeff == 0) {
-            System.out.println("aucune note pour calculer la moyenne générale.");
-        } else {
-            double moyenneGenerale = total / totalCoeff;
-            System.out.println("moyenne générale de l'étudiant : " + moyenneGenerale);
+            throw new IllegalArgumentException("Aucune note pour calculer la moyenne générale");
         }
+
+        return total / totalCoeff;
     }
-
-
 }

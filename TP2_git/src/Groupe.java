@@ -1,79 +1,41 @@
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Groupe {
-    private Map<Formation, List<Etudiant>> groupes;
+    private Formation formation;
+    private List<Etudiant> etudiants;
 
-    public Groupe() {
-        this.groupes = new HashMap<>();
+    public Groupe(Formation formation) {
+        if (formation == null) {
+            throw new IllegalArgumentException("La formation ne peut pas être null");
+        }
+        this.formation = formation;
+        this.etudiants = new ArrayList<>();
     }
 
-
-    public void ajouterEtudiant(Etudiant etudiant) {
+    public void ajouterEtudiant(Etudiant etudiant) throws IllegalArgumentException {
         if (etudiant == null) {
-            System.out.println("L'étudiant ne peut pas être null");
-            return;
+            throw new IllegalArgumentException("L'étudiant ne peut pas être null");
         }
 
-        Formation formation = etudiant.getFormation();
-        if (formation == null) {
-            System.out.println("L'étudiant doit avoir une formation");
-            return;
+        if (!etudiant.getFormation().getId().equals(formation.getId())) {
+            throw new IllegalArgumentException("L'étudiant doit avoir la même formation que le groupe");
         }
 
-        groupes.computeIfAbsent(formation, k -> new ArrayList<>());
-
-
-        List<Etudiant> etudiants = groupes.get(formation);
         if (etudiants.contains(etudiant)) {
-            System.out.println("L'étudiant " + etudiant.getIdentite().getPrenom() + " " +
-                    etudiant.getIdentite().getNom() + " est déjà dans le groupe");
-            return;
+            throw new IllegalArgumentException("L'étudiant est déjà dans le groupe");
         }
-
 
         etudiants.add(etudiant);
-        System.out.println("Étudiant " + etudiant.getIdentite().getPrenom() + " " +
-                etudiant.getIdentite().getNom() + " ajouté au groupe");
     }
 
-
-    public void supprimerEtudiant(Etudiant etudiant) {
+    public void supprimerEtudiant(Etudiant etudiant) throws IllegalArgumentException {
         if (etudiant == null) {
-            System.out.println("L'étudiant ne peut pas être null");
-            return;
+            throw new IllegalArgumentException("L'étudiant ne peut pas être null");
         }
 
-        Formation formation = etudiant.getFormation();
-        if (formation == null) {
-            System.out.println("L'étudiant doit avoir une formation");
-            return;
+        if (!etudiants.remove(etudiant)) {
+            throw new IllegalArgumentException("L'étudiant n'est pas dans le groupe");
         }
-
-        List<Etudiant> etudiants = groupes.get(formation);
-        if (etudiants == null || etudiants.isEmpty()) {
-            System.out.println("Aucun étudiant dans cette formation");
-            return;
-        }
-
-        if (etudiants.remove(etudiant)) {
-            System.out.println("Étudiant " + etudiant.getIdentite().getPrenom() + " " +
-                    etudiant.getIdentite().getNom() + " supprimé du groupe");
-
-
-            if (etudiants.isEmpty()) {
-                groupes.remove(formation);
-            }
-        } else {
-            System.out.println("L'étudiant " + etudiant.getIdentite().getPrenom() + " " +
-                    etudiant.getIdentite().getNom() + " n'est pas dans le groupe");
-        }
-    }
-
-
-    public Map<Formation, List<Etudiant>> getGroupes() {
-        return groupes;
     }
 }

@@ -1,91 +1,121 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class GroupeTest {
-
+public class GroupeTest {
     private Groupe groupe;
     private Formation formation;
-    private Etudiant etudiant1;
-    private Etudiant etudiant2;
+    private Matiere math, francais, anglais, physique;
+    private Etudiant alice, bob, claire;
 
     @BeforeEach
-    void setUp() {
-        groupe = new Groupe();
+    void setUp() throws Exception {
 
-        formation = new Formation("INFO");
-        formation.ajout_matiere(new Matiere("Java"), 2.0);
-
-        Identite id1 = new Identite("Dupont", "Jean", "123");
-        Identite id2 = new Identite("Martin", "Alice", "456");
-
-        etudiant1 = new Etudiant(id1, formation);
-        etudiant2 = new Etudiant(id2, formation);
-    }
+        math = new Matiere("Mathématiques");
+        francais = new Matiere("Français");
+        anglais = new Matiere("Anglais");
+        physique = new Matiere("Physique");
 
 
+        formation = new Formation("L1-INFO");
+        formation.ajout_matiere(math, 3.0);
+        formation.ajout_matiere(francais, 2.0);
+        formation.ajout_matiere(anglais, 1.0);
+        formation.ajout_matiere(physique, 2.5);
 
 
-    @Test
-    void testAjouterEtudiant() {
-        groupe.ajouterEtudiant(etudiant1);
-        Map<Formation, List<Etudiant>> groupes = groupe.getGroupes();
-
-        assertTrue(groupes.containsKey(formation));
-        assertTrue(groupes.get(formation).contains(etudiant1));
-    }
-
-    @Test
-    void testAjouterEtudiantDejaPresent() {
-        groupe.ajouterEtudiant(etudiant1);
-        int tailleAvant = groupe.getGroupes().get(formation).size();
-
-        groupe.ajouterEtudiant(etudiant1); // deuxième ajout
-
-        int tailleApres = groupe.getGroupes().get(formation).size();
-        assertEquals(tailleAvant, tailleApres, "L'étudiant ne doit pas être ajouté deux fois");
-    }
-
-    
+        groupe = new Groupe(formation);
 
 
-    @Test
-    void testSupprimerEtudiantExistant() {
-        groupe.ajouterEtudiant(etudiant1);
-        groupe.supprimerEtudiant(etudiant1);
+        Identite id1 = new Identite("Dupont", "Alice", "123456");
+        alice = new Etudiant(id1, formation);
+        alice.ajouterNote(math, 15.0);
+        alice.ajouterNote(math, 17.0);
+        alice.ajouterNote(francais, 14.0);
+        alice.ajouterNote(francais, 16.0);
+        alice.ajouterNote(anglais, 18.0);
+        alice.ajouterNote(physique, 13.0);
 
-        assertFalse(groupe.getGroupes().containsKey(formation),
-                "La formation doit être supprimée si elle n'a plus d'étudiants");
-    }
-
-
-    @Test
-    void testSupprimerEtudiantAbsent() {
-        groupe.ajouterEtudiant(etudiant1);
-
-        int tailleAvant = groupe.getGroupes().get(formation).size();
-        groupe.supprimerEtudiant(etudiant2); // pas ajouté
-
-        int tailleApres = groupe.getGroupes().get(formation).size();
-        assertEquals(tailleAvant, tailleApres, "Aucune suppression ne doit avoir lieu");
-    }
+        Identite id2 = new Identite("Martin", "Bob", "234567");
+        bob = new Etudiant(id2, formation);
+        bob.ajouterNote(math, 12.0);
+        bob.ajouterNote(math, 14.0);
+        bob.ajouterNote(francais, 13.0);
+        bob.ajouterNote(anglais, 16.0);
 
 
+        Identite id3 = new Identite("Durand", "Claire", "345678");
+        claire = new Etudiant(id3, formation);
+        claire.ajouterNote(math, 18.0);
+        claire.ajouterNote(francais, 17.0);
+        claire.ajouterNote(anglais, 19.0);
+        claire.ajouterNote(physique, 16.0);
 
-
-    @Test
-    void testAjouterEtudiantNull() {
-        groupe.ajouterEtudiant(null);
-        assertTrue(groupe.getGroupes().isEmpty(), "Aucun étudiant ne doit être ajouté si null");
+        groupe.ajouterEtudiant(alice);
+        groupe.ajouterEtudiant(bob);
+        groupe.ajouterEtudiant(claire);
     }
 
     @Test
-    void testSupprimerEtudiantNull() {
-        groupe.supprimerEtudiant(null);
-        assertTrue(groupe.getGroupes().isEmpty(), "Suppression null ne doit rien changer");
+    void testFormationInstanciee() {
+        assertFalse(formation.isEmpty());
+        assertEquals(4, formation.matiereMap.size());
     }
+
+    @Test
+    void testAjoutMatiereCoeffNegatif() {
+        Matiere histoire = new Matiere("Histoire");
+        assertThrows(IllegalArgumentException.class,
+                () -> formation.ajout_matiere(histoire, -1.0));
+    }
+
+    @Test
+    void testCoeffMatiereInexistante() {
+        Matiere histoire = new Matiere("Histoire");
+        assertThrows(IllegalArgumentException.class,
+                () -> formation.getCoefficient(histoire));
+    }
+
+    @Test
+    void testAjoutNoteMatiereSansNote() {
+        assertThrows(IllegalArgumentException.class,
+                () -> bob.calculerMoyenneMatiere(physique));
+    }
+
+    @Test
+    void testAjoutNoteMatiereInexistante() {
+        Matiere histoire = new Matiere("Histoire");
+        assertThrows(IllegalArgumentException.class,
+                () -> alice.ajouterNote(histoire, 15.0));
+    }
+
+    @Test
+    void testAjoutNoteNegative() {
+        assertThrows(IllegalArgumentException.class,
+                () -> alice.ajouterNote(math, -5.0));
+    }
+
+    @Test
+    void testAjoutNoteSuperieure20() {
+        assertThrows(IllegalArgumentException.class,
+                () -> alice.ajouterNote(math, 25.0));
+    }
+
+    @Test
+    void testAjoutEtudiantFormationDifferente() throws Exception {
+        Formation autreFormation = new Formation("L2-MATH");
+        autreFormation.ajout_matiere(math, 2.0);
+        Identite id = new Identite("Test", "Test", "999999");
+        Etudiant etudiantAutreFormation = new Etudiant(id, autreFormation);
+
+        assertThrows(IllegalArgumentException.class,
+                () -> groupe.ajouterEtudiant(etudiantAutreFormation));
+    }
+
+    @Test
+    void testAjoutEtudiantNull() {
+        assertThrows(IllegalArgumentException.class,
+                () -> groupe.ajouterEtudiant(null));
+    }
+
 }
