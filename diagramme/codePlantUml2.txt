@@ -1,0 +1,66 @@
+Diagramme de sequence Moyenne par matière : 
+
+@startuml
+actor Utilisateur
+participant Etudiant
+participant Formation
+participant Resultats
+
+Utilisateur -> Etudiant : calculerMoyenneGenerale()
+Etudiant -> Formation : keySet() (liste des matières)
+Formation --> Etudiant : {matiere1, matiere2, ...}
+
+loop pour chaque matière
+    Etudiant -> Resultats : get(matiere)
+    Resultats --> Etudiant : notes
+
+    alt notes null ou vides
+        note "aucun calcul pour cette matière"
+    else notes disponibles
+        Etudiant -> Etudiant : calcul somme / moyenne matière
+        Etudiant -> Formation : getCoefficient(matiere)
+        Formation --> Etudiant : coefficient
+        Etudiant -> Etudiant : ajoute à total et totalCoeff
+    end
+end
+
+alt totalCoeff == 0
+    Etudiant -> Utilisateur : "aucune note pour calculer la moyenne générale"
+else
+    Etudiant -> Etudiant : moyenneGenerale = total / totalCoeff
+    Etudiant -> Utilisateur : affiche moyenne générale
+end
+@enduml
+
+
+
+
+Diagramme de séquence Moyenne Generale : 
+
+@startuml
+actor Utilisateur
+participant Etudiant
+participant Formation
+participant Resultats
+
+Utilisateur -> Etudiant : calculerMoyenneGenerale()
+Etudiant -> Formation : keySet()
+Formation --> Etudiant : liste des matières
+
+loop pour chaque matière
+    Etudiant -> Resultats : get(matiere)
+    Resultats --> Etudiant : notes
+
+    alt notes null ou vides
+        Etudiant -> Utilisateur : "aucun calcul pour cette matière"
+    else notes valides
+        Etudiant -> Etudiant : calcul somme et moyenne
+    end
+end
+
+alt aucune note dans toute la formation
+    Etudiant -> Utilisateur : "aucune note pour calculer la moyenne générale"
+else au moins une note
+    Etudiant -> Utilisateur : affiche moyenne générale
+end
+@enduml
