@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Iterator;
 
 public class Groupe {
     private Formation formation;
@@ -38,4 +39,75 @@ public class Groupe {
             throw new IllegalArgumentException("L'étudiant n'est pas dans le groupe");
         }
     }
+
+    public double calculerMoyenneMatiereGroupe(Matiere matiere) throws IllegalArgumentException {
+        if (matiere == null) {
+            throw new IllegalArgumentException("La matière ne peut pas être null");
+        }
+
+        if (!formation.matiereMap.containsKey(matiere)) {
+            throw new IllegalArgumentException("La matière n'existe pas dans cette formation");
+        }
+
+        if (etudiants.isEmpty()) {
+            throw new IllegalArgumentException("Aucun étudiant dans le groupe");
+        }
+
+        double sommeMoyennes = 0;
+        int nbEtudiantsAvecNotes = 0;
+
+        Iterator<Etudiant> iterator = etudiants.iterator();
+        while (iterator.hasNext()) {
+            Etudiant etudiant = iterator.next();
+            try {
+                double moyenneEtudiant = etudiant.calculerMoyenneMatiere(matiere);
+                sommeMoyennes += moyenneEtudiant;
+                nbEtudiantsAvecNotes++;
+            } catch (IllegalArgumentException e) {
+                // Étudiant sans notes pour cette matière, on l'ignore
+            }
+        }
+
+        if (nbEtudiantsAvecNotes == 0) {
+            throw new IllegalArgumentException("Aucun étudiant n'a de notes pour cette matière");
+        }
+
+        return sommeMoyennes / nbEtudiantsAvecNotes;
+    }
+
+    public double calculerMoyenneGeneraleGroupe() throws IllegalArgumentException {
+        if (etudiants.isEmpty()) {
+            throw new IllegalArgumentException("Aucun étudiant dans le groupe");
+        }
+
+        double sommeMoyennesGenerales = 0;
+        int nbEtudiantsAvecNotes = 0;
+
+        Iterator<Etudiant> iterator = etudiants.iterator();
+        while (iterator.hasNext()) {
+            Etudiant etudiant = iterator.next();
+            try {
+                double moyenneGeneraleEtudiant = etudiant.calculerMoyenneGenerale();
+                sommeMoyennesGenerales += moyenneGeneraleEtudiant;
+                nbEtudiantsAvecNotes++;
+            } catch (IllegalArgumentException e) {
+                // Étudiant sans notes, on l'ignore
+            }
+        }
+
+        if (nbEtudiantsAvecNotes == 0) {
+            throw new IllegalArgumentException("Aucun étudiant n'a de notes");
+        }
+
+        return sommeMoyennesGenerales / nbEtudiantsAvecNotes;
+    }
+
+    public Formation getFormation() {
+        return formation;
+    }
+
+    public List<Etudiant> getEtudiants() {
+        return new ArrayList<>(etudiants);
+    }
+
 }
