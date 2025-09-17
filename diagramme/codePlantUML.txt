@@ -1,7 +1,8 @@
 @startuml
 
 class Groupe {
-  - groupe : Map<Formation, List<Etudiant>>
+  - formation : Formation
+  - etudiants : List<Etudiant>
 }
 
 class Etudiant {
@@ -25,10 +26,10 @@ class Matiere {
   - nom : String
 }
 
-Etudiant *-- Identite        // composition
-Formation *-- Matiere        // composition
-Etudiant --> Formation       // association
-Groupe --> Formation         // association
-Groupe --> Etudiant          // association
+Etudiant *-- Identite        
+Formation *-- Matiere       
+Etudiant --> Formation       
+Groupe --> Formation        
+Groupe --> Etudiant          
 
 @enduml
