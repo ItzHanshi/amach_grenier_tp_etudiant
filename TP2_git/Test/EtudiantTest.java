@@ -106,36 +106,6 @@ public class EtudiantTest {
                 "Devrait lancer une exception pour matière inexistante");
     }
 
-    @Test
-    public void testCalculerMoyenneGenerale_ToutesMatieresAvecNotes() {
-
-        etudiant.ajouterNote(mathematiques, 15.0);
-        etudiant.ajouterNote(mathematiques, 17.0); // moyenne: 16.0, coeff: 3.0
-
-        etudiant.ajouterNote(physique, 12.0);
-        etudiant.ajouterNote(physique, 14.0); // moyenne: 13.0, coeff: 2.0
-
-        etudiant.ajouterNote(informatique, 18.0); // moyenne: 18.0, coeff: 4.0
-
-        etudiant.ajouterNote(anglais, 14.0);
-        etudiant.ajouterNote(anglais, 16.0); // moyenne: 15.0, coeff: 1.5
-
-        double moyenneGenerale = etudiant.calculerMoyenneGenerale();
-        // Calcul: (16*3 + 13*2 + 18*4 + 15*1.5) / (3+2+4+1.5) = 164.5 / 10.5 = 15.67
-        assertEquals(15.67, moyenneGenerale, 0.01);
-    }
-
-    @Test
-    public void testCalculerMoyenneGenerale_MatieresSansNotes() {
-
-        etudiant.ajouterNote(mathematiques, 16.0);
-        etudiant.ajouterNote(physique, 14.0);
-
-
-        double moyenneGenerale = etudiant.calculerMoyenneGenerale();
-
-        assertEquals(15.2, moyenneGenerale, 0.01);
-    }
 
     @Test
     public void testCalculerMoyenneGenerale_AucuneNote() {

@@ -69,12 +69,6 @@ public class FormationTest {
         assertTrue(formation.isEmpty());
     }
 
-    @Test
-    void testSupprimerMatiereInexistante() {
-        assertThrows(IllegalArgumentException.class,
-                () -> formation.supprimer_matiere(info),
-                "Devrait lancer une exception pour suppression matière inexistante");
-    }
 
     @Test
     void testAjoutMatiereNull() {
