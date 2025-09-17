@@ -1,0 +1,34 @@
+@startuml
+
+class Groupe {
+  - groupe : Map<Formation, List<Etudiant>>
+}
+
+class Etudiant {
+  - identite : Identite
+  - formation : Formation
+  - resultats : Map<Matiere, List<Double>>
+}
+
+class Formation {
+  - idFormation : String
+  - matieres : Map<Matiere, Double>
+}
+
+class Identite {
+  - nip : String
+  - nom : String
+  - prenom : String
+}
+
+class Matiere {
+  - nom : String
+}
+
+Etudiant *-- Identite        // composition
+Formation *-- Matiere        // composition
+Etudiant --> Formation       // association
+Groupe --> Formation         // association
+Groupe --> Etudiant          // association
+
+@enduml
