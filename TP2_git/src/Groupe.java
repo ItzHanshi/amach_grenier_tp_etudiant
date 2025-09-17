@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Groupe {
@@ -11,6 +12,10 @@ public class Groupe {
         }
         this.formation = formation;
         this.etudiants = new ArrayList<>();
+    }
+
+    public List<Etudiant> getEtudiants() {
+        return etudiants;
     }
 
     public void ajouterEtudiant(Etudiant etudiant) throws IllegalArgumentException {
@@ -38,4 +43,16 @@ public class Groupe {
             throw new IllegalArgumentException("L'étudiant n'est pas dans le groupe");
         }
     }
+
+    //tri normale
+    public void triAlpha() {
+        etudiants.sort(Comparator.comparing(e -> e.getIdentite().getNom()));
+    }
+
+    // Tri inverse
+    public void triAntiAlpha() {
+        etudiants.sort(Comparator.comparing((Etudiant e) -> e.getIdentite().getNom()).reversed());
+    }
+
+
 }

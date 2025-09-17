@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class GroupeTest {
@@ -117,5 +120,23 @@ public class GroupeTest {
         assertThrows(IllegalArgumentException.class,
                 () -> groupe.ajouterEtudiant(null));
     }
+    @Test
+    void testTriAlpha() {
+        groupe.triAlpha();
+        List<Etudiant> tri = groupe.getEtudiants();
+        assertEquals("Dupont", tri.get(0).getIdentite().getNom());
+        assertEquals("Durand", tri.get(1).getIdentite().getNom());
+        assertEquals("Martin", tri.get(2).getIdentite().getNom());
+    }
+
+    @Test
+    void testTriAntiAlpha() {
+        groupe.triAntiAlpha();
+        List<Etudiant> tri = groupe.getEtudiants();
+        assertEquals("Martin", tri.get(0).getIdentite().getNom());
+        assertEquals("Durand", tri.get(1).getIdentite().getNom());
+        assertEquals("Dupont", tri.get(2).getIdentite().getNom());
+    }
+
 
 }
