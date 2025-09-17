@@ -14,7 +14,7 @@ public class FormationTest {
 
     @BeforeEach
     void setUp() {
-        formation = new Formation();
+        formation = new Formation("info1");
         math = new Matiere("Mathématiques");
         info = new Matiere("Informatique");
     }

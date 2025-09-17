@@ -16,7 +16,7 @@ public class EtudiantTest {
     public void setUp() {
 
         identite = new Identite("Dupont", "Jean", "123456789");
-        formation = new Formation();
+        formation = new Formation("info1");
 
         mathematiques = new Matiere("Mathématiques");
         physique = new Matiere("Physique");

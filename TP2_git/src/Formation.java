@@ -5,9 +5,14 @@ import java.util.Map;
 public class Formation {
 
 
-    private String ID;
+    private final String id;
 
     Map<Matiere, Double> matiereMap = new HashMap<>();
+
+    public Formation(String id) {
+        this.id = id;
+        this.matiereMap = new HashMap<>();
+    }
 
 
     /* ajouter ou supprimer une matiere dans une formation
