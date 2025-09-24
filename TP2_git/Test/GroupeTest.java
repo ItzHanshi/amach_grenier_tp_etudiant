@@ -163,5 +163,26 @@ public class GroupeTest {
         assertEquals(15.30, moyenneGenerale, 0.1);
     }
 
+    @Test
+    void testTriParMerite() {
+        groupe.triParMerite();
+        List<Etudiant> tri = groupe.getEtudiants();
+
+        // Vérification de l'ordre décroissant par moyenne
+        double m1 = tri.get(0).calculerMoyenneGenerale();
+        double m2 = tri.get(1).calculerMoyenneGenerale();
+        double m3 = tri.get(2).calculerMoyenneGenerale();
+
+        assertTrue(m1 >= m2 && m2 >= m3, "La liste doit être triée par moyenne générale décroissante");
+
+        // Vérification que Claire est première
+        assertEquals("Durand", tri.get(0).getIdentite().getNom());
+
+        // Vérification que Bob est dernier
+        assertEquals("Martin", tri.get(2).getIdentite().getNom());
+    }
+
+
+
 
 }
