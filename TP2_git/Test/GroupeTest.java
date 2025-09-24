@@ -139,4 +139,29 @@ public class GroupeTest {
     }
 
 
+    @Test
+    void testSupprimerEtudiant() {
+        groupe.supprimerEtudiant(bob);
+        assertEquals(2, groupe.getEtudiants().size());
+        assertFalse(groupe.getEtudiants().contains(bob));
+    }
+
+    @Test
+    void testMoyenneMatiereGroupe() {
+
+        double moyenneMath = groupe.calculerMoyenneMatiereGroupe(math);
+        assertEquals(15.67, moyenneMath, 0.01);
+
+        double moyennePhysique = groupe.calculerMoyenneMatiereGroupe(physique);
+        assertEquals(14.5, moyennePhysique, 0.01);
+    }
+
+    @Test
+    void testMoyenneGeneraleGroupe() throws Exception {
+        double moyenneGenerale = groupe.calculerMoyenneGeneraleGroupe();
+        assertTrue(moyenneGenerale > 0);
+        assertEquals(15.30, moyenneGenerale, 0.1);
+    }
+
+
 }
