@@ -122,5 +122,9 @@ public class Groupe {
         return new ArrayList<>(etudiants);
     }
 
+    public void triParMerite() {
+        etudiants.sort(Comparator.comparingDouble(Etudiant::calculerMoyenneGenerale).reversed());
+    }
+
 
 }
